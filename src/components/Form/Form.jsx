@@ -1,22 +1,32 @@
 
 import { useState } from "react"
 
-function Form({searchMovie}) {
-//State to hold the data of our form
-const[formData, setFormData] = useState({query : ""});
+function Form({ searchFunction }) {
+  //State to hold the data of our form
+  const [formData, setFormData] = useState({ query: "" });
 
-//handle change on input field
-function handleChange(e){
-  let newFormData = {...formData};
-  newFormData[e.target.name] = e.target.value
-  setFormData(newFormData);
-}
-
+  //handle change on input field
+  function handleChange(e) {
+    let newFormData = { ...formData };
+    newFormData[e.target.name] = e.target.value
+    setFormData(newFormData);
+  }
+  function handleSubmit(e) {
+    // Prevent page from refreshing on form submission
+    e.preventDefault();
+    //Pass the query to search function
+    searchFunction(formData.query);
+  }
 
   return (
-    <form >
-        <input type="search" placeholder="Movie title..." />
-        <input type="submit" value="Search" />
+    <form onSubmit={handleSubmit}>
+      <input 
+      type="search" 
+      placeholder="Movie title..." 
+      name="query"
+      onChange={handleChange}
+      value={formData.query}/>
+      <input type="submit" value="Search" />
     </form>
   )
 }

@@ -17,16 +17,26 @@ function App() {
   //state to hold movie data
 const[movieData,setMovieData] = useState(null);
 
+useState(()=>{
+ search('')
+},[]);
+
 async function search(query){
   try{
-  // Make get requestand store the response
-  const response = await axios.get(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&t=${query}`
-  );
+    let param="";
+    if(query===''){
+      query = `tt${Math.floor(Math.random() * (10000000)+1000000)}`
+      param = 'i'
+    }
+    else param ='t'
+    const url = `http://www.omdbapi.com/?apikey=${API_KEY}&${param}=${query}`;
+  console.log(url)
+    // Make get requestand store the response
+  const response = await axios.get(url);
 
   // Set the Movie state to the received data
     setMovieData(response);
-    console.log(response)
+    console.log(movieData)
   }catch(err){
     console.log(err)
   }
@@ -35,8 +45,8 @@ async function search(query){
   return (
     <>
       <div className="App">
-        <Form searchMovie={getMovieData}/>
-        {movieData ? <MovieDisplay /> :null}
+        <Form searchFunction={search}/>
+        {movieData ? <MovieDisplay movie={movieData.data}/> :null}
       </div>
     </>
   )
